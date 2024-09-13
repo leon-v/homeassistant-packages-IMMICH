@@ -1,0 +1,104 @@
+immich_api_jobs:
+
+  input_text:
+    immich_host:
+      name: IMMICH Host Name
+      initial: !secret immich_host
+
+  # Step 1: Define rest_command for each endpoint
+  rest_command:
+    immich_thumbnail_generation:
+      url: "https://{{ states('input_text.immich_host') }}/api/jobs/thumbnailGeneration"
+      method: PUT
+      headers:
+        x-api-key: !secret immich_api_key
+      payload: '{"command": "{{ command }}", "force": false}'
+      content_type: "application/json; charset=utf-8"
+
+    immich_video_conversion:
+      url: "https://{{ states('input_text.immich_host') }}/api/jobs/videoConversion"
+      method: PUT
+      headers:
+        x-api-key: !secret immich_api_key
+      payload: '{"command": "{{ command }}", "force": false}'
+      content_type: "application/json; charset=utf-8"
+
+    immich_face_detection:
+      url: "https://{{ states('input_text.immich_host') }}/api/jobs/faceDetection"
+      method: PUT
+      headers:
+        x-api-key: !secret immich_api_key
+      payload: '{"command": "{{ command }}", "force": false}'
+      content_type: "application/json; charset=utf-8"
+
+    immich_facial_recognition:
+      url: "https://{{ states('input_text.immich_host') }}/api/jobs/facialRecognition"
+      method: PUT
+      headers:
+        x-api-key: !secret immich_api_key
+      payload: '{"command": "{{ command }}", "force": false}'
+      content_type: "application/json; charset=utf-8"
+
+    immich_smart_search:
+      url: "https://{{ states('input_text.immich_host') }}/api/jobs/smartSearch"
+      method: PUT
+      headers:
+        x-api-key: !secret immich_api_key
+      payload: '{"command": "{{ command }}", "force": false}'
+      content_type: "application/json; charset=utf-8"
+
+    immich_duplicate_detection:
+      url: "https://{{ states('input_text.immich_host') }}/api/jobs/duplicateDetection"
+      method: PUT
+      headers:
+        x-api-key: !secret immich_api_key
+      payload: '{"command": "{{ command }}", "force": false}'
+      content_type: "application/json; charset=utf-8"
+
+  # Step 2: Create automations for 'pause' and 'resume' triggers
+  automation:
+    - alias: "Pause Immich Jobs"
+      trigger:
+        # Define your trigger here (e.g., a button press, time, or state change)
+      action:
+        - service: rest_command.immich_thumbnail_generation
+          data:
+            command: "pause"
+        - service: rest_command.immich_video_conversion
+          data:
+            command: "pause"
+        - service: rest_command.immich_face_detection
+          data:
+            command: "pause"
+        - service: rest_command.immich_facial_recognition
+          data:
+            command: "pause"
+        - service: rest_command.immich_smart_search
+          data:
+            command: "pause"
+        - service: rest_command.immich_duplicate_detection
+          data:
+            command: "pause"
+
+    - alias: "Resume Immich Jobs"
+      trigger:
+        # Define your trigger here (e.g., a button press, time, or state change)
+      action:
+        - service: rest_command.immich_thumbnail_generation
+          data:
+            command: "resume"
+        - service: rest_command.immich_video_conversion
+          data:
+            command: "resume"
+        - service: rest_command.immich_face_detection
+          data:
+            command: "resume"
+        - service: rest_command.immich_facial_recognition
+          data:
+            command: "resume"
+        - service: rest_command.immich_smart_search
+          data:
+            command: "resume"
+        - service: rest_command.immich_duplicate_detection
+          data:
+            command: "resume"
